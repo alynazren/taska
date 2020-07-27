@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Logbook;
 use App\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Db;
 
 class LogbookController extends Controller
 {
@@ -14,10 +15,45 @@ class LogbookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $students = Student::where('teacher_id', auth()->user()->id)->get();
+    { 
+        if(auth()->user()->hasrole('teacher')){
 
-        return view('logbook')->with('active','logbook')->with('formwizard',true)->with('students', $students);
+            $students = Student::where('teacher_id', auth()->user()->id)->get();
+            $logbooks = Logbook::where('teacher_id', auth()->user()->id)->get();
+
+        }else if(auth()->user()->hasrole('parent')){
+
+            if(request('child')){ // kalau dia pilih nak tengok anak yg mana punya logbook
+
+                $students = '';
+                $logbooks = Logbook::where('student_id', request('child'))->get();
+
+                // echo json_encode($logbooks);
+
+            }else{
+
+                $students = Student::where('parent_id', auth()->user()->id)->get();
+
+                $mychild = array();
+
+                foreach($students as $c){
+
+                    array_push($mychild, $c->id);
+                }
+
+                $logbooks = Logbook::myChild($mychild)->get();
+            }
+
+        }else{
+
+            $students = Student::all();
+            $logbooks = Logbook::all();
+        }
+
+        return view('logbook')->with('active','logbook')
+                                ->with('formwizard',true)
+                                ->with('students', $students)
+                                ->with('logbooks', $logbooks);
     }
 
     /**
@@ -84,7 +120,7 @@ class LogbookController extends Controller
      */
     public function show(Logbook $logbook)
     {
-        //
+        return view('logbook.viewlogbook')->with('logbook',$logbook)->with('active','logbook');
     }
 
     /**

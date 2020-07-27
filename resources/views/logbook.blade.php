@@ -7,6 +7,10 @@
     width: 100%;
   }
 
+  .btn-rounded {
+    border-radius: 40%;
+  }
+
  .mt-200 {
      margin-top: 200px
  }
@@ -45,9 +49,11 @@
           </nav>
         </div>
         <div class="col-lg-6 col-5 text-right">
+          @hasrole('teacher')
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
             <i class="fas fa-plus"></i> New Logbook
           </button>
+          @endhasrole
         </div>
       </div>
     </div>
@@ -63,18 +69,35 @@
       </div>
       <!-- Light table -->
       <div class="table-responsive">
-        <table class="table align-items-center table-flush">
+        <table class="table table-hover align-items-center table-flush">
           <thead class="thead-light">
             <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Age</th>
-              <th scope="col">Gender</th>
-              <th scope="col">Parent Name</th>
-              <th>Action</th>
+              <th scope="col">ID</th>
+              <th scope="col">Logbook Date</th>
+              <th scope="col">Student</th>
+              @hasrole('parent')
+              <th>Teacher</th>
+              <th>Contact No</th>
+              @endhasrole
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody class="list">
-
+            @foreach($logbooks as $logbook)
+              <tr>
+                <td>{{ $logbook->id }}</td>
+                <td>{{ $logbook->date }}</td>
+                <td>{{ $logbook->student->name }}</td>
+                @hasrole('parent')
+                <th>{{ $logbook->teacher->name }}</th>
+                <th>{{ $logbook->teacher->phone }}</th>
+                @endhasrole
+                <td>
+                  <a href="{{ url('logbook/'.$logbook->id) }}" role="button"><i class="fas fa-search mr-4"></i></a> 
+                  <a href="" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-trash-alt text-danger"></i></a>
+                </td>
+              </tr>
+            @endforeach
 
           </tbody>
         </table>
@@ -112,9 +135,11 @@
                                       <p><b>Student name : </b></p> 
                                       <select name="id" class="form-control">
                                         <option value="">Select student</option>
-                                        @foreach($students as $student)
-                                        <option value="{{ $student->id }}">{{ $student->name }}</option>
-                                        @endforeach
+                                        @if($students != '')
+                                          @foreach($students as $student)
+                                          <option value="{{ $student->id }}">{{ $student->name }}</option>
+                                          @endforeach
+                                        @endif
                                       </select>
                                       <br>
                                   </div>
@@ -305,32 +330,6 @@
      </div>
   </div>
       
-  <!-- Footer -->
-  <footer class="footer pt-0">
-    <div class="row align-items-center justify-content-lg-between">
-      <div class="col-lg-6">
-        <div class="copyright text-center  text-lg-left  text-muted">
-          &copy; 2020 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Creative Tim</a>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-          <li class="nav-item">
-            <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
-          </li>
-          <li class="nav-item">
-            <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
-          </li>
-          <li class="nav-item">
-            <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </footer>
 </div>
 
 <script>

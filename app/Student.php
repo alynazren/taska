@@ -17,4 +17,9 @@ class Student extends Model
 
     	return $this->hasOne(User::class, 'id', 'teacher_id');
     }
+
+    public function logbook()
+    {
+    	return $this->hasMany(Logbook::class, 'student_id','id');
+    }
 }
