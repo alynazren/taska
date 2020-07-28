@@ -26,7 +26,7 @@ class LogbookController extends Controller
             if(request('child')){ // kalau dia pilih nak tengok anak yg mana punya logbook
 
                 $students = '';
-                $logbooks = Logbook::where('student_id', request('child'))->get();
+                $logbooks = Logbook::where('student_id', request('child'))->parent(auth()->user()->id)->get();
 
                 // echo json_encode($logbooks);
 

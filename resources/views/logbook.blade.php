@@ -36,7 +36,7 @@
   }
 </style>
 
-<div class="header bg-primary pb-6">
+<div class="header {{ env('BG','bg-primary') }} pb-6">
   <div class="container-fluid">
     <div class="header-body">
       <div class="row align-items-center py-4">
@@ -44,7 +44,7 @@
           <h6 class="h2 text-white d-inline-block mb-0">Students</h6>
           <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
             <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-              <li class="breadcrumb-item"><a href="{{ url('/students') }}">Logbook Records</a></li>
+              <li class="breadcrumb-item"><a href="{{ url('/logbook') }}">Logbook Records</a></li>
             </ol>
           </nav>
         </div>
@@ -93,8 +93,10 @@
                 <th>{{ $logbook->teacher->phone }}</th>
                 @endhasrole
                 <td>
-                  <a href="{{ url('logbook/'.$logbook->id) }}" role="button"><i class="fas fa-search mr-4"></i></a> 
+                  <a href="{{ url('logbook/'.$logbook->id) }}" role="button"><i class="fas fa-search mr-4"></i></a>
+                  @hasrole('teacher')
                   <a href="" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-trash-alt text-danger"></i></a>
+                  @endhasrole
                 </td>
               </tr>
             @endforeach

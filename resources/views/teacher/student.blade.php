@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="header bg-primary pb-6">
+<div class="header {{ env('BG','bg-primary') }} pb-6">
   <div class="container-fluid">
     <div class="header-body">
       <div class="row align-items-center py-4">
@@ -72,6 +72,13 @@
                         data-toggle="modal" 
                         data-target="#removeUserModal" 
                         href="#">Remove</a>
+                    <a class="dropdown-item messageUser"
+                        data-id="{{ $st->id }}" 
+                        data-name="{{ $st->name }}" 
+                        data-parent="{{ $st->parent_id }}" 
+                        data-toggle="modal" 
+                        data-target="#messageUserModal"  
+                        href="#">Message</a>    
                   </div>
                 </div>
                         
@@ -121,6 +128,34 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal -->
+<div class="modal fade" id="messageUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <h5 class="modal-title" id="exampleModalLabel">Message Student</h5><br>
+        @if($errors->any())
+        <p class="badge badge-success">{{ $errors->first() }}</p>
+        @endif
+
+        <form action="{{ url('/feedback') }}" method="POST">
+          @csrf
+          <input type="hidden" name="student_id" id="mstud" value="">
+          <input type="hidden" name="parent_id" id="mpar" value="">
+          <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+          <br>
+          <textarea name="content" class="form-control" rows="3" required></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Send</button>
         </form>
       </div>
     </div>
@@ -197,6 +232,12 @@
 </div>
 
 
+@if($errors->any())
+  <script>
+    $('#messageUserModal').modal('show');
+  </script>
+@endif
+
 <script>
   $('.editUser').click(function(){
 
@@ -214,6 +255,15 @@
     $('#uage').val(age);
     $('#ugender').val(gender);
     $('#uparent').val(parent);
+  });
+
+  $('.messageUser').click(function(){
+
+    var id = $(this).data('id');
+    var parent = $(this).data('parent');
+
+    $('#mstud').val(id);
+    $('#mpar').val(parent);
   });
 
   $('.removeUser').click(function(){

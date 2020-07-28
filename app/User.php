@@ -59,6 +59,20 @@ class User extends Authenticatable
                 ->select('users.*','users.name as parent_name')
                 ->crossJoin('student', 'student.parent_id', '=', 'users.id')
                 ->where('student.teacher_id', $teacher_id)
-                ->groupBy('users.id',);
+                ->groupBy('users.id');
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

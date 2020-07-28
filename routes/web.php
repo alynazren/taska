@@ -30,19 +30,22 @@ Route::middleware(['auth'])->group(function () {
 		
 		Route::get('panel', 'DashboardController@panel');
 		Route::get('parents' , 'UsersController@parents');
-		
-
 	});
 
 	Route::middleware(['parent'])->group(function () {
 		Route::get('/home', 'HomeController@index');
+		Route::get('/inbox', 'FeedbackController@index');
 	});
 
 	Route::resource('logbook','LogbookController');
 	Route::get('profile','HomeController@profile');
 	// Sharable Link Between roles
+	Route::resource('feedback','FeedbackController');
 	Route::resource('users','UsersController');
 	Route::resource('students','StudentController');
+
+	Route::get('change', 'UsersController@cp');
+	Route::post('ch','UsersController@reset')->name('reset');
 });
 
 

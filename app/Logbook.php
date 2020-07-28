@@ -22,4 +22,11 @@ class Logbook extends Model
     {
         return $query->whereIn('student_id', $ids);
     }
+
+    public function scopeParent($query, $parent_id)
+    {
+        return $query
+                ->join('student', 'student.id', '=', 'logbook.student_id')
+                ->where('student.parent_id', $parent_id);
+    }
 }

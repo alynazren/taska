@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="header bg-primary pb-6">
+<div class="header {{ env('BG','bg-primary') }} pb-6">
   <div class="container-fluid">
     <div class="header-body">
       <div class="row align-items-center py-4">
@@ -28,8 +28,8 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
-                  <span class="h2 font-weight-bold mb-0">350,897</span>
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Teachers</h5>
+                  <span class="h2 font-weight-bold mb-0">{{ $total_teacher }}</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -50,8 +50,8 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                  <span class="h2 font-weight-bold mb-0">2,356</span>
+                  <h5 class="card-title text-uppercase text-muted mb-0">New Students</h5>
+                  <span class="h2 font-weight-bold mb-0">{{ $total_students }}</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -72,8 +72,8 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
-                  <span class="h2 font-weight-bold mb-0">924</span>
+                  <h5 class="card-title text-uppercase text-muted mb-0">Logbooks</h5>
+                  <span class="h2 font-weight-bold mb-0">{{ $total_logbook }} Logbooks</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
@@ -94,8 +94,8 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>
-                  <span class="h2 font-weight-bold mb-0">49,65%</span>
+                  <h5 class="card-title text-uppercase text-muted mb-0">Parents</h5>
+                  <span class="h2 font-weight-bold mb-0">{{ $total_parent }}</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">

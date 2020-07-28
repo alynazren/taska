@@ -6,6 +6,7 @@ use App\User;
 use App\ModelHasRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Validator;
 
 class UsersController extends Controller
 {
@@ -14,6 +15,13 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $msg;
+
+    public function __construct()
+    {
+        $this->msg = '';
+    }
+
     public function index()
     {
         $users = User::whereHas('roles', function ($query){
@@ -106,23 +114,43 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user = User::find(request('id'));
 
-        $user->name = request('name');
-        $user->email = request('email');
-        $user->phone = request('phone');
+        if(auth()->user()->hasrole('admin')){
 
-        $user->save();
+            $user = User::find(request('id'));
+
+            $user->name = request('name');
+            $user->email = request('email');
+            $user->phone = request('phone');
+
+            $user->save();
 
 
-        // save role for this user
-        $mhr = ModelHasRole::where('model_id', request('id'))->first();
+            // save role for this user
+            $mhr = ModelHasRole::where('model_id', request('id'))->first();
 
-        $mhr->role_id = request('role');
+            $mhr->role_id = request('role');
 
-        $mhr->save();
+            $mhr->save();
 
-        return redirect('/users');
+            return redirect('/users');
+
+        }else{
+
+            $user = User::find(auth()->user()->id);
+
+            $user->name = request('username');
+            $user->email = request('email');
+            $user->fullname = request('fullname');
+            $user->occupation = request('occupation');
+            $user->address = request('address');
+            $user->phone = request('phone');
+
+            $user->save();
+
+            return redirect()->back()->withErrors(['Profile is updated!']);
+        }
+        
     }
 
     /**
@@ -142,15 +170,42 @@ class UsersController extends Controller
 
         $parents = $user->studentParent(auth()->user()->id)->get();
 
-        // foreach($parents as $parent){
-
-        //     echo $parent->parent_name;
-        //     echo "<br>";
-        //     print_r($parent->children[
-        //     echo "<br>";
-        // }
-
         return view('teacher.parent')->with('active','parents')->with('parents', $parents);
+    }
+
+    public function cp(){
+
+        $msg = $this->msg;
+
+        return view('auth.cd')->with('active', 'profile')->with('msg',$msg);
+    }
+
+    public function reset(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'pwd' => [
+                'bail',
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (!Hash::check(request('pwd'), auth()->user()->password)) {
+                        $fail('Password is invalid.');
+                    }
+                },
+            ],
+            'newpwd' => 'bail|required',
+            'newpwd2' => 'same:newpwd'
+
+        ])->validate();
+
+        $user = User::find(auth()->user()->id);
+
+        $user->password = Hash::make(request('newpwd'));
+
+        $user->save();
+
+        $this->msg = "Password successfully updated!";
+
+        return view('auth.cd')->with('active', 'profile')->with('msg',$this->msg);
     }
 }
 

@@ -19,7 +19,7 @@ class StudentController extends Controller
 
         $parents = User::role('parent')->get();
 
-        return view('teacher.student')->with('active','students')->with('students',$students)->with('parents', $parents);
+        return view('teacher.student')->with('msg','')->with('active','students')->with('students',$students)->with('parents', $parents);
     }
 
     /**

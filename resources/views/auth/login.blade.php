@@ -17,7 +17,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
   <meta name="author" content="Creative Tim">
-  <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
+  <title>Logbook</title>
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('themes/img/brand/favicon.png') }}" type="image/png">
   <!-- Fonts -->
@@ -27,6 +27,13 @@
   <link rel="stylesheet" href="{{ asset('themes/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" type="text/css">
   <!-- Argon CSS -->
   <link rel="stylesheet" href="{{ asset('themes/css/argon.css?v=1.2.0') }}" type="text/css">
+
+  <style type="text/css">
+    .navbar-brand {
+      width: 100px;
+      /*height: 80px!important;*/
+    }
+  </style>
 </head>
 
 <body class="bg-default">
@@ -34,7 +41,7 @@
   <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
     <div class="container">
       <a class="navbar-brand" href="dashboard.html">
-        <img src="../assets/img/brand/white.png">
+        <img src="{{ asset('image/logos.png') }}" width="100%">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -44,7 +51,7 @@
           <div class="row">
             <div class="col-6 collapse-brand">
               <a href="dashboard.html">
-                <img src="{{ asset('/img/brand/blue.png') }}">
+                <img src="{{ asset('image/logos.png') }}">
               </a>
             </div>
             <div class="col-6 collapse-close">
@@ -75,7 +82,11 @@
         <div class="col-lg-5 col-md-7">
           <div class="card bg-secondary border-0 mb-0">
             <div class="card-body px-lg-5 py-lg-5">
-              
+
+
+              @if ($errors->any())
+              <p class="badge badge-danger">Invalid credential!</p>
+              @endif
               <form role="form" action="{{ route('login') }}" method="POST">
                 @csrf
                 <div class="form-group mb-3">

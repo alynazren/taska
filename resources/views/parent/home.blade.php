@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="header bg-primary pb-6">
+<div class="header {{ env('BG','bg-primary') }} pb-6">
   <div class="container-fluid">
     <div class="header-body">
       <div class="row align-items-center py-4">
@@ -41,7 +41,7 @@
         <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
           <div class="d-flex justify-content-between">
             <a href="{{ url('logbook?child='.$child->id) }}" class="btn btn-sm btn-info  mr-4 ">Logbook</a>
-            <a href="#" class="btn btn-sm btn-default float-right">Message</a>
+            <a href="{{ url('inbox?child='.$child->id) }}" class="btn btn-sm btn-default float-right">Message</a>
           </div>
         </div>
         <div class="card-body pt-0">
